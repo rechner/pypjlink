@@ -9,6 +9,6 @@ Fork of pypjlink which is no longer maintained.
 from pypjlink import Projector
 
 with Projector.from_address('projector_host') as projector:
-    p.authenticate()
-    p.set_power('on')
+    projector.authenticate()
+    projector.set_power('on')
 ```
