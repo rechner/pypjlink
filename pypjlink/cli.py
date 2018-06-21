@@ -88,6 +88,7 @@ def cmd_errors(p):
 def make_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--projector')
+    parser.add_argument('-e', '--encoding', default='utf-8')
 
     sub = parser.add_subparsers(dest='command', title='command')
     sub.required = True
@@ -161,17 +162,18 @@ def main():
 
     projector = kwargs.pop('projector')
     host, port, password = resolve_projector(projector)
+    encoding = kwargs.pop('encoding')
 
     if not password:
         password = getpass
 
-    proj = Projector.from_address(host, port)
-    rv = proj.authenticate(password)
-    if rv is False:
-        print_error('Incorrect password.')
-        return
+    with Projector.from_address(host, port, encoding) as proj:
+        rv = proj.authenticate(password)
+        if rv is False:
+            print_error('Incorrect password.')
+            return
 
-    func(proj, **kwargs)
+        func(proj, **kwargs)
 
 if __name__ == '__main__':
     main()
