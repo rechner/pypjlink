@@ -46,11 +46,21 @@ ERROR_STATES_REV = {
 }
 
 class Projector(object):
-    def __init__(self, f):
+    def __init__(self, f, encoding):
         self.f = f
+        self.encoding = encoding
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        self.close()
+
+    def close(self):
+        self.f.close()
 
     @classmethod
-    def from_address(cls, address, port=4352):
+    def from_address(cls, address, port=4352, encoding='utf-8'):
         """build a Projector from a ip address"""
         sock = socket.socket()
         sock.connect((address, port))
@@ -61,19 +71,20 @@ class Projector(object):
         if sys.version_info.major == 2:
             f = sock.makefile()
         else:
-            f = sock.makefile(mode='rw', newline='\r')
-        return cls(f)
+            f = sock.makefile(mode='rw', newline='\r', encoding=encoding)
+        sock.close()
+        return cls(f, encoding)
 
     def authenticate(self, password=None):
         # I'm just implementing the authentication scheme designed in the
         # protocol. Don't take this as any kind of assurance that it's secure.
 
-        data = protocol.read(self.f, 9)
+        data = protocol.read(self.f, 9, self.encoding)
         assert data[:7] == 'PJLINK '
         security = data[7]
         if security == '0':
             return None
-        data += protocol.read(self.f, 9)
+        data += protocol.read(self.f, 9, self.encoding)
         assert security == '1'
         assert data[8] == ' '
         salt = data[9:17]
@@ -96,16 +107,16 @@ class Projector(object):
         self.f.flush()
 
         # read the response, see if it's a failed auth
-        data = protocol.read(self.f, 7)
+        data = protocol.read(self.f, 7, self.encoding)
         if data == 'PJLINK ':
             # should be a failed auth if we get that
-            data += protocol.read(self.f, 5)
+            data += protocol.read(self.f, 5, self.encoding)
             assert data == 'PJLINK ERRA\r'
             # it definitely is
             return False
 
         # good auth, so we should get a reply to the command we sent
-        body, param = protocol.parse_response(self.f, data)
+        body, param = protocol.parse_response(self.f, self.encoding, data)
 
         # make sure we got a sensible response back
         assert body == 'POWR'
@@ -116,13 +127,13 @@ class Projector(object):
         return True
 
     def get(self, body):
-        success, response = protocol.send_command(self.f, body, '?')
+        success, response = protocol.send_command(self.f, body, '?', self.encoding)
         if not success:
             raise ProjectorError(response)
         return response
 
     def set(self, body, param):
-        success, response = protocol.send_command(self.f, body, param)
+        success, response = protocol.send_command(self.f, body, param, self.encoding)
         if not success:
             raise ProjectorError(response)
         assert response == 'OK'

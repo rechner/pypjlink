@@ -3,7 +3,7 @@
 import sys
 
 
-def read_until(f, term):
+def read_until(f, term, encoding):
     data = []
     c = f.read(1)
     while c != term:
@@ -11,7 +11,7 @@ def read_until(f, term):
         c = f.read(1)
     data = ''.join(data)
     if sys.version_info.major == 2:
-        data = data.decode('utf-8')
+        data = data.decode(encoding)
     return data
 
 def to_binary(body, param, sep=' '):
@@ -22,9 +22,9 @@ def to_binary(body, param, sep=' '):
 
     return '%1' + body + sep + param + '\r'
 
-def parse_response(f, data=''):
+def parse_response(f, encoding, data=''):
     if len(data) < 7:
-        data += read(f, 2 + 4 + 1 - len(data))
+        data += read(f, 2 + 4 + 1 - len(data), encoding)
 
     header = data[0]
     assert header == '%'
@@ -42,17 +42,17 @@ def parse_response(f, data=''):
     sep = data[6]
     assert sep == '='
 
-    param = read_until(f, '\r')
+    param = read_until(f, '\r', encoding)
 
     return (body, param)
 
 # python 3 socket makefile is already unicode in text mode, i do the same on
 # python 2
 if sys.version_info.major == 2:
-    def read(f, n):
-        return f.read(n).decode('utf-8')
+    def read(f, n, encoding):
+        return f.read(n).decode(encoding)
 else:
-    def read(f, n):
+    def read(f, n, encoding):
         return f.read(n)
 
 
@@ -63,12 +63,12 @@ ERRORS = {
     'ERR4': 'projector failure',
 }
 
-def send_command(f, req_body, req_param):
+def send_command(f, req_body, req_param, encoding):
     data = to_binary(req_body, req_param)
     f.write(data)
     f.flush()
 
-    resp_body, resp_param = parse_response(f)
+    resp_body, resp_param = parse_response(f, encoding)
     assert resp_body == req_body
 
     if resp_param in ERRORS:
