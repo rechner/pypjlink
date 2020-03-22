@@ -10,7 +10,7 @@ with open('README.md', 'r') as fh:
 
 print(long_description)
 setup(
-    name='pypjlink2',
+    name='pypjlink2-rechner',
     version=version,
     author=('Peter Ward <peteraward@gmail.com>, '
             'Gaetano Guerriero <gaetano.guerriero@spacespa.it>, '
