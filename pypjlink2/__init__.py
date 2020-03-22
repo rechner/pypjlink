@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-version = '1.2.0'
+version = '1.2.2'
 
-from pypjlink.projector import (
+from .projector import (
     Projector,
     MUTE_VIDEO, MUTE_AUDIO,
 )

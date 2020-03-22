@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import hashlib
 import unittest
 
-from pypjlink.projector import Projector, POWER_STATES
+from pypjlink2.projector import Projector, POWER_STATES
 from .utils import MockProjSocket
 
 

@@ -17,9 +17,9 @@ import sys
 
 import appdirs
 
-from pypjlink import Projector
-from pypjlink import projector
-from pypjlink.cliutils import make_command, print_error
+from . import Projector
+from . import projector
+from .cliutils import make_command, print_error
 
 def cmd_power(p, state=None):
     if state is None:

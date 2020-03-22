@@ -6,7 +6,7 @@ import hashlib
 import socket
 import sys
 
-from pypjlink import protocol
+from . import protocol
 
 class ProjectorError(Exception):
     pass
@@ -34,6 +34,7 @@ MUTE_VIDEO = 1
 MUTE_AUDIO = 2
 MUTE_STATES_REV = {
     '11': (True, False),
+    '20': (False, False),
     '21': (False, True),
     '31': (True, True),
     '30': (False, False),

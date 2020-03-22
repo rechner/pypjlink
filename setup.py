@@ -3,7 +3,7 @@
 
 from setuptools import find_packages, setup
 
-from pypjlink import version
+from pypjlink2 import version
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
@@ -16,7 +16,7 @@ setup(
             'Gaetano Guerriero <gaetano.guerriero@spacespa.it>, '
             'Benoit Louy <pypjlink@mm.st>'),
     author_email='pypjlink@mm.st',
-    url='https://github.com/benoitlouy/pypjlink',
+    url='https://github.com/rechner/pypjlink',
     description='PJLink is a standard for controlling data projectors.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -33,7 +33,7 @@ setup(
     packages=find_packages(exclude=['tests']),
     entry_points={
         'console_scripts': [
-            'pjlink = pypjlink.cli:main',
+            'pjlink2 = pypjlink2.cli:main',
         ],
     },
     test_suite='tests',

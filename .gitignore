@@ -3,3 +3,6 @@ __pycache__
 pypjlink.egg-info/
 /.tox/
 /dist/
+/build/
+/venv/
+/pypjlink2_rechner.egg-info/
