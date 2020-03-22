@@ -80,7 +80,7 @@ class Projector(object):
         # protocol. Don't take this as any kind of assurance that it's secure.
 
         data = protocol.read(self.f, 9, self.encoding)
-        assert data[:7] == 'PJLINK '
+        assert data[:7].upper() == 'PJLINK '
         security = data[7]
         if security == '0':
             return None
@@ -108,7 +108,7 @@ class Projector(object):
 
         # read the response, see if it's a failed auth
         data = protocol.read(self.f, 7, self.encoding)
-        if data == 'PJLINK ':
+        if data.upper() == 'PJLINK ':
             # should be a failed auth if we get that
             data += protocol.read(self.f, 5, self.encoding)
             assert data == 'PJLINK ERRA\r'
