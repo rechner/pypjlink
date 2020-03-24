@@ -17,7 +17,7 @@ class MockProjSocket(object):
     calling .write mock method
     """
 
-    mock_target = 'pypjlink2.projector.socket.socket'
+    mock_target = 'pypjlink.projector.socket.socket'
 
     def __init__(self, response):
         self._response = response

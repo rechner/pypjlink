@@ -6,7 +6,7 @@ Fork of pypjlink which is no longer maintained, with support for Optoma projecto
 
 ## Usage
 ```python
-from pypjlink2 import Projector
+from pypjlink import Projector
 
 with Projector.from_address('projector_host') as projector:
     projector.authenticate()
