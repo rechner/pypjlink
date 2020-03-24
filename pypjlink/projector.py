@@ -6,7 +6,7 @@ import hashlib
 import socket
 import sys
 
-from . import protocol
+from pypjlink import protocol
 
 class ProjectorError(Exception):
     pass

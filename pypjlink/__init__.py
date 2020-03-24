@@ -2,7 +2,7 @@
 
 version = '1.2.1'
 
-from .projector import (
+from pypjlink.projector import (
     Projector,
     MUTE_VIDEO, MUTE_AUDIO,
 )
